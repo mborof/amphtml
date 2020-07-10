@@ -258,7 +258,8 @@ export class ResourcesImpl {
       try {
         this.intersectionObserver_ = new IntersectionObserver(
           (e) => this.intersect(e),
-          {root, rootMargin: '200% 25%'}
+          // rootMargin matches size of loadRect: (150vw 300vh) * 1.25.
+          {root, rootMargin: '250% 31.25%'}
         );
 
         // Wait for intersection callback instead of measuring all elements
@@ -1215,9 +1216,12 @@ export class ResourcesImpl {
     this.divertedRenderOnIdleFixExperiment_ = true;
     const experimentInfoMap = /** @type {!Object<string,
         !../experiments.ExperimentInfo>} */ ({
-      [RENDER_ON_IDLE_FIX_EXP.experiment]: {
+      [RENDER_ON_IDLE_FIX_EXP.id]: {
         isTrafficEligible: () => true,
-        branches: [RENDER_ON_IDLE_FIX_EXP.control, RENDER_ON_IDLE_FIX_EXP],
+        branches: [
+          RENDER_ON_IDLE_FIX_EXP.control,
+          RENDER_ON_IDLE_FIX_EXP.experiment,
+        ],
       },
     });
     randomlySelectUnsetExperiments(this.win, experimentInfoMap);
