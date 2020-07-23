@@ -86,7 +86,7 @@ describes.realWin('AmpFetcher', {amp: true}, env => {
     });
     fetcher.sendBeacon(sentUrl, sentMessage);
   });
-
+ 
   it('should support beacon when beacon not supported', async () => {
     env.sandbox.stub(WindowInterface, 'getSendBeacon').callsFake(() => null);
     env.sandbox.stub(xhr, 'fetch').callsFake((url, init) => {
@@ -100,6 +100,20 @@ describes.realWin('AmpFetcher', {amp: true}, env => {
     });
 
     fetcher.sendBeacon(sentUrl, sentMessage);
+  });
+
+  it('should send a post', async () => {
+    env.sandbox.stub(xhr, 'fetch').callsFake((url, init) => {
+      expect(url).to.equal(sentUrl);
+      expect(init).to.deep.equal({
+        method: 'POST',
+        headers: {'Content-Type': contentType},
+        credentials: 'include',
+        body: expectedBodyString,
+      });
+    });
+
+    fetcher.postMessage(sentUrl, sentMessage);
   });
 });
 
